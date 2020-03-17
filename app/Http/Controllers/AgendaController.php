@@ -3,19 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\AgendaRepository;
 
 class AgendaController extends Controller
 {
+    private $agendaRepository;
+
+    public function __construct(AgendaRepository $agendaRepository){
+        $this->agendaRepository = $agendaRepository;
+    }
     public function index(){
-        $user = Auth::user();
-        $agendas = DB::table('agendas')
-                    ->leftJoin('pacients', 'agendas.pacient_id', '=', 'pacients.id')
-                    ->leftJoin('professionals', 'agendas.professional_id', '=', 'professionals.id')
-                    ->select('agendas.*', 'professionals.*', 'pacients.*')
-                    ->where('agendas.user_id', $user->id)
-                    ->get();
+        $agendas = $this->agendaRepository->getAll();
         return view('home', compact('agendas'));
+    }
+
+    public function store(Request $request){
+      
+		$request->validate([
+			'search'      => 'required',
+			'search2'     => 'required',
+			'data_inicio' => 'required',
+			'horas'       => 'required',
+		]);
+        
+        $agenda = $this->agendaRepository->store($request->all());
+
+        if($agenda){
+            return back()->with('sucesso', 'Paciente agendado com sucesso.');
+        }
+
+        return back()->with('falhou', 'Erro ao tentar agendar.');
+		
+    }
+
+    public function searchPacient(Request $request){
+        $pacient = $this->agendaRepository->searchPacient($request->get('term'));
+        return response()->json($pacient);
+    }
+
+    public function searchProfessional(Request $request){
+        $pacient = $this->agendaRepository->searchProfessional($request->get('term'));
+        return response()->json($pacient);
     }
 }

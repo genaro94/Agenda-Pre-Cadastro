@@ -22,7 +22,6 @@ class CreateAgendasTable extends Migration
             $table->integer('professional_id')->unsigned();
             $table->foreign('professional_id')->references('id')->on('professionals');
             $table->dateTime('date');
-            $table->dateTime('duration');
             $table->string('details')->nullable();
             $table->timestamps();
         });

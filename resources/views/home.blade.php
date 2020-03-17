@@ -19,12 +19,25 @@
         </div>
     </div>
 </div>
+<!-- cadastrarAgenda -->
+@include('agenda.cadastrarAgenda')
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.js'></script>
 
 <script type="text/javascript">
+   $(document).ready(function() {
+
+        $().ready(function() {
+        setTimeout(function () {
+            $('#msg').hide(); // "foo" é o id do elemento que seja manipular.
+        }, 4000); // O valor é representado em milisegundos.
+        setTimeout(function () {
+            $('#msg2').hide(); // "foo" é o id do elemento que seja manipular.
+        }, 4000);
+        });
+    });
       $(document).ready(function() {
         $('#calendar').fullCalendar({
           monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro',
@@ -60,11 +73,10 @@
           foreach($agendas as $agenda){
             ?>
             {
-              dentista_id: '<?php echo $agenda->nome_dentista; ?>',
-              title: '<?php echo $agenda->nome_paciente; ?>',
-              start: '<?php echo $agenda->data_inicio; ?>',
-              color: '<?php echo $agenda->cor; ?>',
-              assunto: '<?php echo $agenda->assunto; ?>',
+              dentista_id: '<?php echo $agenda->name; ?>',
+              title: '<?php echo $agenda->name; ?>',
+              start: '<?php echo $agenda->date; ?>',
+              assunto: '<?php echo $agenda->details; ?>',
               id: '<?php echo $agenda->id; ?>',
             },<?php
           }
@@ -78,15 +90,14 @@
             $('#visualizar #assunto').text(event.assunto);
             $('#visualizar #id').text(event.id);
             $('#visualizar #horas').text(event.start.format('HH:mm'));
-            $('#visualizar #data_inicio').text(event.start.format('DD/MM/Y'));
+            $('#visualizar #date').text(event.start.format('DD/MM/Y'));
 
             $('#visualizar .nome_paciente').val(event.title);
             $('#visualizar .nome_dentista').val(event.dentista_id);
             $('#visualizar #detalhe').val(event.assunto);
             $('#visualizar #id_agenda').val(event.id);
             $('#visualizar #horas').val(event.start.format('HH:mm'));
-            $('#visualizar #cor').val(event.color);
-            $('#visualizar #data_inicio').val(event.start.format('DD/MM/Y'));
+            $('#visualizar #date').val(event.start.format('DD/MM/Y'));
 
             $('#visualizar').modal('show');
 
@@ -103,7 +114,73 @@
         });
 
       });
+      function DataHora(evento, objeto) {
+        var keypress = (window.event) ? event.keyCode : evento.which;
+        campo = eval(objeto);
+        if (campo.value == '00/00/0000') {
+          campo.value = "";
+        }
+
+        caracteres = '0123456789';
+        separacao1 = '/';
+        separacao2 = ' ';
+        separacao3 = ':';
+        conjunto1 = 2;
+        conjunto2 = 5;
+        conjunto3 = 10;
+        conjunto4 = 13;
+        conjunto5 = 16;
+        if ((caracteres.search(String.fromCharCode(keypress)) != -1) && campo.value.length < (10)) {
+          if (campo.value.length == conjunto1)
+            campo.value = campo.value + separacao1;
+          else if (campo.value.length == conjunto2)
+            campo.value = campo.value + separacao1;
+          else if (campo.value.length == conjunto3)
+            campo.value = campo.value + separacao2;
+          else if (campo.value.length == conjunto4)
+            campo.value = campo.value + separacao3;
+          else if (campo.value.length == conjunto5)
+            campo.value = campo.value + separacao3;
+        } else {
+          event.returnValue = false;
+        }
+      }
+
     </script>
+    <script src="{{asset('js/jquery.easy-autocomplete.js')}}"></script>
+    <script>
 
+        var options = {
 
+            url: "{{route('agenda.search.professional')}}",
+
+            getValue: "name",
+
+            list: {
+            match: {
+                enabled: true
+            }
+            },
+
+            theme: "square"
+        };
+        var options2 = {
+
+          url: "{{route('agenda.search.pacient')}}",
+
+          getValue: "name",
+
+          list: {
+          match: {
+              enabled: true
+          }
+          },
+
+          theme: "square"
+        };
+
+        $("#professional").easyAutocomplete(options);
+        $("#pacient").easyAutocomplete(options2);
+
+    </script>
 @endsection
