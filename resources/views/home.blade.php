@@ -158,6 +158,42 @@
 
     </script>
     <script src="{{asset('js/jquery.easy-autocomplete.js')}}"></script>
+    <style>
+        .autocomplete-manual{
+            padding: 0px!important;
+            border: 1px solid #ccc
+        }
+        .autocomplete-manual a:hover {
+            background: none repeat scroll 0 0 #ebebeb;
+            color:#000
+        }
+
+
+    </style>
+    <script>
+        $(document).ready(function(){
+            $('.country_name').keyup(function(){
+             
+                var query = $(this).val();
+                if(query != ''){
+                    $.ajax({
+                        url:"{{route('agenda.search.pacient')}}",
+                        method:"GET",
+                        data:{query:query},
+                        minlenght:1,
+                        success: function (data){
+                            $('.countryList').fadeIn();
+                            $('.countryList').html(data);
+                        }
+                    });
+                }
+            });
+            $(document).on('click', 'li', function(){
+                $('.country_name').val($(this).text());
+                $('.countryList').fadeOut();
+            });
+        })
+    </script>
     <script>
 
         var options = {
@@ -174,23 +210,8 @@
 
             theme: "square"
         };
-        var options2 = {
-
-          url: "{{route('agenda.search.pacient')}}",
-
-          getValue: "name",
-
-          list: {
-          match: {
-              enabled: true
-          }
-          },
-
-          theme: "square"
-        };
 
         $("#professional").easyAutocomplete(options);
-        $("#pacient").easyAutocomplete(options2);
-
     </script>
+    
 @endsection

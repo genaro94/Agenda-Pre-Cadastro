@@ -37,12 +37,12 @@ class AgendaController extends Controller
     }
 
     public function searchPacient(Request $request){
-        $pacient = $this->agendaRepository->searchPacient($request->get('term'));
+        $pacient = $this->agendaRepository->searchPacient($request->get('query'));
         return response()->json($pacient);
     }
 
     public function searchProfessional(Request $request){
         $pacient = $this->agendaRepository->searchProfessional($request->get('term'));
-        return response()->json($pacient);
+        return $pacient;
     }
 }

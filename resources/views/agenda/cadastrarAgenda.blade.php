@@ -31,7 +31,8 @@
           <div class="col-md-12">
             <div class="form-group">
               <label class="bmd-label-floating">Paciente</label>
-              <input name="search2" required="" id="pacient" type="text" class="form-control"/>
+              <input type="text" name="search2" id="country_name" class="form-control country_name" autocomplete="off">
+               <div class="countryList" id="countryList"></div>
             </div>
           </div>
         </div>

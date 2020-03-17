@@ -42,11 +42,29 @@ class AgendaRepository {
     }
 
     public function searchPacient($name){
-      $pacient =  DB::table('users')
-                      ->where('name', 'LIKE', '%'. $name. '%')
-                      ->where('permission', 'pacient')
-                      ->get();
-      return $pacient;
+        $result  = DB::table('users')
+                        ->where('name', 'LIKE', '%'. $name. '%')
+                        ->where('permission', 'pacient')
+                        ->get();
+
+        if(count($result) > 0){
+            $output = '<ul class="dropdown-menu" style="display:contents;position:relative;" >';
+            foreach($result as $row){
+                $output .= '<li class=" autocomplete-manual"><a href="#"  style="padding-left: 6px;">'.$row->name.'</a></li>';
+            }
+            $output .= '</ul>';
+            return $output;
+        }
+        else{
+            $output = '<ul class="dropdown-menu" style="display:contents;position:relative;" >';
+            $output .= '<li class=" autocomplete-manual">
+                            <a data-toggle="modal" data-target="#addNovoPaciente" href="#" style="padding-left: 6px;">
+                                <i class="fas fa-plus" style="padding-right:5px"></i> Adicionar paciente
+                            </a>
+                        </li>';
+            $output .= '</ul>';
+            return $output;
+        }
     }
 
     public function searchProfessional($name){
