@@ -74,4 +74,5 @@ class AgendaRepository {
                           ->get();
       return $professional;
     }
+
 }

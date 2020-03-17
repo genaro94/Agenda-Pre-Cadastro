@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\AgendaRepository;
+use App\Repositories\PacientRepository;
 
 class AgendaController extends Controller
 {
     private $agendaRepository;
+    private $pacientRepository;
 
-    public function __construct(AgendaRepository $agendaRepository){
-        $this->agendaRepository = $agendaRepository;
+    public function __construct(AgendaRepository $agendaRepository, 
+                                PacientRepository $pacientRepository){
+        $this->agendaRepository  = $agendaRepository;
+        $this->pacientRepository = $pacientRepository;
     }
     public function index(){
         $agendas = $this->agendaRepository->getAll();
@@ -44,5 +48,19 @@ class AgendaController extends Controller
     public function searchProfessional(Request $request){
         $pacient = $this->agendaRepository->searchProfessional($request->get('term'));
         return $pacient;
+    }
+
+    public function storePacient(Request $request){
+        $request->validate([
+			'name'      => 'required',
+			'cpf'       => 'required',
+		]);
+        
+        $pacient = $this->pacientRepository->storePacient($request->all());
+        if($pacient){
+            return back()->with('sucesso', 'Paciente cadastrado com sucesso.');
+        }
+
+        return back()->with('falhou', 'Erro ao tentar cadastrar.');
     }
 }

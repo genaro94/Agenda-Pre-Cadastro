@@ -31,6 +31,9 @@
 </div>
 <!-- cadastrarAgenda -->
 @include('agenda.cadastrarAgenda')
+<!-- pre cadastro de paciente -->
+@include('agenda.addNovoPaciente')
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
@@ -38,6 +41,7 @@
 
 <script type="text/javascript">
    $(document).ready(function() {
+        $('#cpf').mask('000.000.000-00');
 
         $().ready(function() {
         setTimeout(function () {
