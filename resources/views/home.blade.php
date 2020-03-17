@@ -1,6 +1,16 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
+  @if(Session::has('sucesso'))
+  <div id="msg" data-notify="container" class="col-11 col-md-4 alert alert-success alert-with-icon animated fadeInDown" role="alert" data-notify-position="top-center" style="display: inline-block; margin: 15px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1031; top: 20px; left: 0px; right: 0px;">
+    {{ Session::get('sucesso') }}
+    <button type="button" aria-hidden="true" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 50%; margin-top: -9px; z-index: 1033;"></button><span data-notify="title"></span><a href="#" target="_blank" data-notify="url"></a></div>
+
+    @elseif(Session::has('falhou'))
+    <div id="msg2" data-notify="container" class="col-11 col-md-4 alert alert-danger alert-with-icon animated fadeInDown" role="alert" data-notify-position="top-center" style="display: inline-block; margin: 15px auto; position: fixed; transition: all 0.5s ease-in-out 0s; z-index: 1031; top: 20px; left: 0px; right: 0px;">
+      {{ Session::get('falhou') }}
+      <button type="button" aria-hidden="true" class="close" data-notify="dismiss" style="position: absolute; right: 10px; top: 50%; margin-top: -9px; z-index: 1033;"></button><span data-notify="title"></span><a href="#" target="_blank" data-notify="url"></a></div>
+      @endif
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
